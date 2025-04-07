@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "978843589430",
+    "project_id": "instascan-4eb4f",
+    "storage_bucket": "instascan-4eb4f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978843589430:android:be9eede32a47e2c567b197",
+        "android_client_info": {
+          "package_name": "com.instascan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC82FrawxKEFsieoz9WUBQpZKrU93NrWUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
