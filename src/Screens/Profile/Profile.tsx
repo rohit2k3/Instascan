@@ -16,6 +16,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {firebase} from '@react-native-firebase/auth';
 import BackButton from '../../Components/BackButton/BackButton';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from '../../constant/colors';
 
 interface MenuItemProps {
   id: string;
@@ -51,10 +52,16 @@ const Profile = () => {
     try {
       const logoutRes = await firebase.auth().signOut();
       ToastAndroid.show('Logout Successful', ToastAndroid.SHORT);
-      navigation.replace('LoginScreen');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'LoginScreen'}],
+      });
     } catch (error) {
       console.error('Logout error:', error);
-      ToastAndroid.show('Logout Failed', ToastAndroid.SHORT);
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'LoginScreen'}],
+      });
     }
   };
   const inviteHandler = async () => {
@@ -200,7 +207,7 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.screenBackground ,
   },
   header: {
     paddingHorizontal: 20,

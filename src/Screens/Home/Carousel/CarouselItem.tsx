@@ -1,63 +1,62 @@
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
+import React from 'react';
 
-const {width} = Dimensions.get('screen')
+const { width } = Dimensions.get('screen');
 
 type CarouselItemProps = {
-    ImageSrc: any,
-    title: string,
-}
+  ImageSrc: any;
+  title: string;
+};
 
-const CarouselItem = ({ImageSrc , title }:CarouselItemProps) => {
+const CarouselItem = ({ ImageSrc, title }: CarouselItemProps) => {
   return (
-    <View style={style.slideContainer}>
-      <View>
-        <Image source={ImageSrc} style={{height:100 , width:50}} />
-        <Text>{title}</Text>
+    <View style={styles.slideContainer}>
+      <Image source={ImageSrc} style={styles.image} />
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>Instant Scan for X-Ray & Skin Conditions</Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
-const style = StyleSheet.create({
-    slideContainer: {
-        marginHorizontal: 10,
-        marginTop: 10,
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        filter: 'drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2))',
-        height: 200,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        marginBottom: 10,
-        width: width - 40,
-      },
-      image: {
-        width: "100%",
-        height: "100%",
-        resizeMode: "contain",
-      },
-      overlay: {
-        position: "absolute",
-        bottom: 15,
-        left: 15,
-        backgroundColor: "rgba(0, 0, 0, 0.6)",
-        padding: 8,
-        borderRadius: 8,
-      },
-      text: {
-        color: "#fff",
-        fontSize: 18,
-        fontWeight: "bold",
-      },
-})
+const styles = StyleSheet.create({
+  slideContainer: {
+    width: width - 40,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    borderRadius: 16,
+    backgroundColor: '#f6f8fb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 6,
+    overflow: 'hidden',
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 150,
+    resizeMode: 'contain',
+    backgroundColor: '#e6eef4',
+  },
+  textContainer: {
+    padding: 16,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#1c1c1e',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#6c757d',
+    textAlign: 'center',
+  },
+});
 
-export default CarouselItem
+export default CarouselItem;

@@ -1,10 +1,11 @@
-import {View, Text, FlatList, Alert, ActivityIndicator} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Text, FlatList, Alert, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import BackButton from '../../Components/BackButton/BackButton';
 import HistoryCard from '../../Components/HistoryCard';
-import {getAuth} from '@react-native-firebase/auth';
-import firestore, {Timestamp} from '@react-native-firebase/firestore';
+import { getAuth } from '@react-native-firebase/auth';
+import firestore, { Timestamp } from '@react-native-firebase/firestore';
 import HistoryScreenSkeleton from '../../Components/Skeleton/HistoryScreenSkeleton';
+import colors from '../../constant/colors';
 
 interface PatientData {
   age: string;
@@ -18,7 +19,7 @@ interface PatientData {
   phoneNumber: string;
   scanType: string;
   uid: string;
-  resultScore: string;
+  disease_confidence: string;
 }
 
 const HistoryScreen = () => {
@@ -36,8 +37,8 @@ const HistoryScreen = () => {
 
         const querySnapshot = await firestore()
           .collection('patients')
-          .where('uid', '==', user.uid) // Filter by UID
-          .orderBy('createdAt', 'desc') // Sort by latest scans
+          .where('uid', '==', user.uid)
+          .orderBy('createdAt', 'desc')
           .get();
 
         const patientData = querySnapshot.docs.map(doc => {
@@ -54,7 +55,7 @@ const HistoryScreen = () => {
             phoneNumber: data.phoneNumber,
             scanType: data.scanType,
             uid: data.uid,
-            resultScore: data.resultScore,
+            disease_confidence: data.disease_confidence,
           };
         });
 
@@ -70,41 +71,57 @@ const HistoryScreen = () => {
     fetchPatients();
   }, []);
 
-  if (loading) return <HistoryScreenSkeleton />
-
+  if (loading) return <HistoryScreenSkeleton />;
 
   return (
-    <View>
+    <View style={styles.container}>
       <BackButton title="Scan History" />
       {patients.length > 0 ? (
         <FlatList
           data={patients}
-          style={{
-            marginHorizontal: 'auto',
-          }}
-          scrollEnabled={true}
+          scrollEnabled
           showsVerticalScrollIndicator={false}
-          keyExtractor={item => item.toString()}
-          renderItem={({item}) => (
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.listContent}
+          renderItem={({ item }) => (
             <HistoryCard
               key={item.id}
               date={item.createdAt}
               docID={item.id}
               patientName={item.patientName}
-              resultScore={item.resultScore}
+              resultScore={item.disease_confidence}
               scanType={item.scanType}
             />
           )}
         />
       ) : (
-        <View>
-          <Text style={{textAlign: 'center', marginVertical: 'auto'}}>
-            No History found
-          </Text>
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>No Scan History Found</Text>
         </View>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.screenBackground,
+    flex: 1,
+  },
+  listContent: {
+    paddingBottom: 30,
+    paddingHorizontal: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#777',
+    textAlign: 'center',
+  },
+});
 
 export default HistoryScreen;

@@ -34,6 +34,7 @@ const Register = () => {
   const db = firestore();
   
   const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -47,6 +48,17 @@ const Register = () => {
     const newErrors: {[key: string]: string} = {};
 
     if (!name.trim()) newErrors.name = 'Name is required';
+
+    if (!/^[a-zA-Z ]+$/.test(name)) {
+      newErrors.name = 'Name can only contain letters and spaces';
+    }
+    
+    //add for phone number validation
+    if (!phoneNumber) {
+      newErrors.phoneNumber = 'Phone number is required';
+    } else if (!/^\d{10}$/.test(phoneNumber)) {
+      newErrors.phoneNumber = 'Phone number must be 10 digits';
+    }
 
     if (!email) {
       newErrors.email = 'Email is required';
@@ -88,6 +100,7 @@ const Register = () => {
         name,
         email,
         uid,
+        phoneNumber,
         createdAt: firestore.FieldValue.serverTimestamp(),
       };
       
@@ -171,7 +184,19 @@ const Register = () => {
             error={errors.email}
             returnKeyType="next"
           />
-
+          <TextInputField
+            label="Phone Number"
+            value={phoneNumber}
+            onChangeText={(text:any) => {
+              setPhoneNumber(text);
+              if (errors.phoneNumber) setErrors({...errors, phoneNumber: ''});
+            }}
+            keyboardType="number-pad"
+            iconName="email-outline"
+            iconType="MaterialCommunityIcons"
+            error={errors.phoneNumber}
+            returnKeyType="next"
+          />
           <TextInputField
             label="Password"
             value={password}
@@ -276,7 +301,7 @@ const Register = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.screenBackground,
   },
   scrollContainer: {
     flexGrow: 1,

@@ -4,5 +4,5 @@ export default {
     primary:"#4630EB",
     error:"#FF0000",
     success:"#00FF00",
-    screenBackground:"#f9eded",
+    screenBackground:"#FAF9F4",
 }

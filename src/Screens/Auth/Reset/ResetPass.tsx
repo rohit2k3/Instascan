@@ -201,7 +201,7 @@ const ResetPass = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.screenBackground,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -221,12 +221,13 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: 10,
     backgroundColor: '#f8f9fa',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
-    elevation: 4,
+    // elevation: 4,
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,

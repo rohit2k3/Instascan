@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import BackButton from '../../Components/BackButton/BackButton';
+import colors from '../../constant/colors';
 
 const TermsAndCondition = () => {
   return (
@@ -75,7 +76,7 @@ const TermsAndCondition = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1, // IMPORTANT: allows the ScrollView to take full height
-    backgroundColor: '#fff',
+    backgroundColor: colors.screenBackground,
   },
   container: {
     flex: 1,

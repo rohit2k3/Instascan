@@ -1,4 +1,6 @@
 import { Timestamp } from "@react-native-firebase/firestore";
+import axios from "axios";
+import { ToastAndroid } from "react-native";
 
 export const formatDate = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = {
@@ -42,3 +44,15 @@ export const extractDateTime = (input: string): { date: string; time: string } =
     time: match[2], // "23:18:40"
   };
 };
+
+export const getConfidenceScore = async (scanType: string , image_url:string) => {
+  try {
+    const url = `https://instascan-backend.onrender.com/predict${scanType}`;
+    const response = await axios.post(url , {image_url:image_url});
+    const {disease_confidence} = response.data;
+    return disease_confidence;
+  } catch (error) {
+    console.error("Error fetching confidence score:", error);
+    ToastAndroid.show("Error fetching confidence score", ToastAndroid.LONG);
+  }
+}

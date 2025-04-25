@@ -21,11 +21,12 @@ import {RouteProp, useRoute, useNavigation} from '@react-navigation/native';
 import SelectDropdown from 'react-native-select-dropdown';
 import DatePicker from 'react-native-date-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { calculateAge, formatDate, generateScanId } from '../../Utils/HelperFunctions';
+import { calculateAge, formatDate, generateScanId, getConfidenceScore } from '../../Utils/HelperFunctions';
 import firestore from '@react-native-firebase/firestore';
 import { getAuth} from '@react-native-firebase/auth';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import colors from '../../constant/colors';
 
 type FormData = {
   patientName: string;
@@ -55,7 +56,7 @@ const PatientForm = () => {
       patientReportImage: '',
       scanType: scanType,
       id:generateScanId(),
-      resultScore:0,
+      disease_confidence:0,
     },
   });
 
@@ -154,6 +155,10 @@ const PatientForm = () => {
         if (uploadedImageURL) {
           setValue('patientReportImage', uploadedImageURL);
         }
+        const score = await getConfidenceScore(scanType , uploadedImageURL);
+        console.log(score);
+        
+        setValue('disease_confidence', score);
         setUploadScanImageLoading(false);
       }
     } catch (error) {
@@ -370,7 +375,7 @@ const PatientForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.screenBackground,
   },
   scrollView: {
     padding: 20,

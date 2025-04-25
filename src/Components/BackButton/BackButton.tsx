@@ -50,6 +50,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ArrowBack from '../../assets/ArrowBack';
+import colors from '../../constant/colors';
 
 interface BackHeaderProps {
   title: string;
@@ -80,7 +81,7 @@ const BackButton = ({
       {/* Back Button */}
       {showBackButton && (
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
-          <ArrowBack />
+          <ArrowBack  />
         </TouchableOpacity>
       )}
 
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: "white",
+    backgroundColor: colors.screenBackground,
   },
   backButton: {marginRight: 12},
   titleContainer: {
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   },
   centerTitleContainer: {marginLeft: -40, justifyContent: 'center'},
   icon: {marginRight: 8},
-  headTitle: {fontSize: 21, fontFamily: 'Mulish-Bold', color: '#141E0D'},
+  headTitle: {fontSize: 21, fontFamily: 'Mulish-Bold',fontWeight:"bold", color: '#141E0D'},
   rightElement: {marginLeft: 'auto'},
 });
 

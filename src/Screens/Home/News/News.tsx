@@ -1,5 +1,5 @@
 import {View, Text, FlatList} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import NewsCard from './Components/NewsCard';
 import Divider from '../../../Components/Divider';
 
@@ -110,6 +110,9 @@ const responseData = {
 };
 
 const News = () => {
+
+  const [newsRes , setNewsRes] = useState([]);
+  
   
   return (
     <View>

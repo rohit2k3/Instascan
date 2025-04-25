@@ -24,7 +24,7 @@ const HistoryCard = ({date,patientName,resultScore,scanType ,docID}:HistoryCardP
         <View style={{flex: 1 ,  justifyContent: 'center', paddingLeft: 10}}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>{scanType} Test</Text>
             <Text style={{fontSize: 16, color: '#666'}}>Patient Name: {patientName}</Text>
-            <Text style={{fontSize: 16, color: '#666'}}>Result: {resultScore}%</Text>
+            <Text style={{fontSize: 16, color: '#666'}}>Disease Confidence: {resultScore}%</Text>
             <Text style={{fontSize: 16, color: '#666'}}>Date: {date.toDate().toDateString()}</Text>
             <Text style={{fontSize: 16, color: '#666'}}>Time: {date.toDate().toLocaleTimeString()}</Text>
         </View>

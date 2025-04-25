@@ -20,7 +20,7 @@ import firestore, {Timestamp} from '@react-native-firebase/firestore';
 import {Alert} from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {actualDownload, Downloader} from '../../Utils/DownloadManager';
-
+import colors from '../../constant/colors';
 
 interface ScanDetailProps {
   patientName: string;
@@ -34,7 +34,7 @@ interface ScanDetailProps {
   id: string;
   createdAt: Timestamp;
   uid: string;
-  scanResult?: string;
+  disease_confidence?: string;
 }
 
 const ScanDetail = () => {
@@ -59,7 +59,6 @@ const ScanDetail = () => {
     scanResult: 'Normal',
   });
   const [loading, setLoading] = useState(false);
-  
 
   //   const htmlContent = `
   //   <html>
@@ -102,17 +101,20 @@ const ScanDetail = () => {
   //   </html>
   // `;
 
-  const htmlContent = `<html>
+  const htmlContent = `
+<html>
   <head>
     <style>
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         padding: 40px;
+        background-color: #fff;
         color: #333;
       }
 
       .container {
-
+        border-radius: 12px;
+        max-width: 800px;
         margin: auto;
       }
 
@@ -122,18 +124,20 @@ const ScanDetail = () => {
       }
 
       .logo {
-        width: 80px;
-        margin-bottom: 10px;
-      }
-
-      h1 {
-        font-size: 28px;
+        font-size: 32px;
+        font-weight: bold;
         color: #004085;
         margin-bottom: 5px;
       }
 
+      h1 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 0;
+      }
+
       .section {
-        margin-bottom: 25px;
+        margin-bottom: 30px;
       }
 
       .section-title {
@@ -141,7 +145,7 @@ const ScanDetail = () => {
         font-weight: bold;
         border-left: 4px solid #004085;
         padding-left: 10px;
-        margin-bottom: 12px;
+        margin-bottom: 15px;
         color: #004085;
       }
 
@@ -162,38 +166,32 @@ const ScanDetail = () => {
         text-align: center;
       }
 
+      .image-section .section-title {
+        text-align: left;
+      }
+
       .image {
         width: 100%;
         max-width: 250px;
         max-height: 300px;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: 10px;
         border: 1px solid #ccc;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       }
-      .image-section .section-title {
-        text-align: left;
-        display: inline-block;
-      }         
 
       .footer {
         text-align: center;
         font-size: 13px;
         color: #999;
-        margin-top: 40px;
-        position:absolute;
-        bottom: 10;
-        left: 0;
-        right: 0;
-        padding: 10px;
-        margin-left: auto;
-        margin-right: auto;
+        margin-top: 50px;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <img src=${"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_l4AG6__eTGJivUAgkOsAfyznzojI6Ydzhw&s"} class="logo" alt="App Logo" />
+        <div class="logo">InstaScan</div>
         <h1>Scan Report</h1>
       </div>
 
@@ -201,6 +199,11 @@ const ScanDetail = () => {
         <div class="section-title">Patient Information</div>
         <p><strong>Name:</strong> ${scanData.patientName}</p>
         <p><strong>Phone Number:</strong> ${scanData.phoneNumber}</p>
+        <p><strong>Gender:</strong> ${scanData.gender}</p>
+        <p><strong>Date of Birth:</strong> ${scanData.patientDOB
+          .toDate()
+          .toLocaleDateString()}</p>
+        <p><strong>Patient ID:</strong> ${scanData.id}</p>
       </div>
 
       <div class="section">
@@ -212,35 +215,34 @@ const ScanDetail = () => {
         <p><strong>Time:</strong> ${scanData.createdAt
           .toDate()
           .toLocaleTimeString()}</p>
-        <p><strong>Result:</strong> ${scanData.scanResult}</p>
+        <p><strong>Result Confidence:</strong> ${
+          scanData.disease_confidence
+        }</p>
       </div>
 
       <div class="divider">
         <div class="image-section">
           <div class="section-title">Patient Image</div>
-          <img
-            src="https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            class="image"
-            alt="Patient Image"
-          />
+          <img src="${
+            scanData.patientImage
+          }" class="image" alt="Patient Image" />
         </div>
         <div class="image-section">
           <div class="section-title">Scan Image</div>
-          <img
-            src="https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            class="image"
-            alt="Scan Image"
-          />
+          <img src="${
+            scanData.patientReportImage
+          }" class="image" alt="Scan Image" />
         </div>
       </div>
 
       <div class="footer">
-        © ${new Date().getFullYear()} Your App Name. All rights reserved.
+        © ${new Date().getFullYear()} InstaScan. All rights reserved.
       </div>
     </div>
   </body>
 </html>
 `;
+
   const createPDF = async () => {
     let options = {
       html: htmlContent,
@@ -360,8 +362,10 @@ const ScanDetail = () => {
                 style={styles.infoIcon}
               />
               <View>
-                <Text style={styles.infoLabel}>Scan ID</Text>
-                <Text style={styles.infoValue}>{scanData.id}</Text>
+                <Text style={styles.infoLabel}>disease_confidence</Text>
+                <Text style={styles.infoValue}>
+                  {scanData.disease_confidence}
+                </Text>
               </View>
             </View>
           </View>
@@ -378,14 +382,20 @@ const ScanDetail = () => {
           <TouchableOpacity
             style={styles.downloadButton}
             onPress={handleDownload}>
-              {loading ? <ActivityIndicator size={'small'} style={{marginHorizontal:5}} color="#fff" /> : null}
+            {loading ? (
+              <ActivityIndicator
+                size={'small'}
+                style={{marginHorizontal: 5}}
+                color="#fff"
+              />
+            ) : null}
             <FontAwesome5
               name="download"
               size={16}
               color="#fff"
               style={styles.downloadIcon}
             />
-            
+
             <Text style={styles.downloadText}>Download Report</Text>
           </TouchableOpacity>
         </View>
@@ -397,7 +407,7 @@ const ScanDetail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.screenBackground,
   },
   scrollView: {
     flex: 1,

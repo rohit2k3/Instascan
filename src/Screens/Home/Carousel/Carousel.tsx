@@ -1,20 +1,26 @@
-import React, { useState } from "react";
-import { View, Image, StyleSheet, TouchableOpacity, FlatList, Dimensions, Text } from "react-native";
+import React, { useState, useRef } from "react";
+import {
+  View,
+  FlatList,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  Text
+} from "react-native";
 import AssetImages from "../../../assets/images/Images";
-import HistoryCard from "../../../Components/HistoryCard";
 import CarouselItem from "./CarouselItem";
 
 const { width } = Dimensions.get("window");
 
 const slides = [
   { image: AssetImages.appNameWithLogo, text: "Welcome to Instascan" },
-  { image: AssetImages.appNameWithLogo, text: "Welcome to Instascan" },
-  { image: AssetImages.appNameWithLogo, text: "Welcome to Instascan" },
+  { image: AssetImages.appNameWithLogo, text: "Scan X-rays & Skin Conditions Instantly" },
+  { image: AssetImages.appNameWithLogo, text: "Get Medical Results on the Go" },
 ];
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = React.useRef<FlatList>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   const handleScroll = (event: any) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
@@ -22,8 +28,8 @@ const Carousel = () => {
   };
 
   const navigateToSlide = (index: number) => {
-    setCurrentIndex(index);
     flatListRef.current?.scrollToIndex({ index, animated: true });
+    setCurrentIndex(index);
   };
 
   return (
@@ -33,23 +39,23 @@ const Carousel = () => {
         data={slides}
         horizontal
         pagingEnabled
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          marginHorizontal: 'auto',
-        }}
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         renderItem={({ item }) => (
           <CarouselItem ImageSrc={item.image} title={item.text} />
         )}
         keyExtractor={(_, index) => index.toString()}
+        contentContainerStyle={styles.flatListContent}
       />
+
       <View style={styles.pagination}>
         {slides.map((_, index) => (
           <TouchableOpacity
             key={index}
-            style={[styles.dot, currentIndex === index && styles.activeDot]}
+            style={[
+              styles.dot,
+              currentIndex === index && styles.activeDot
+            ]}
             onPress={() => navigateToSlide(index)}
           />
         ))}
@@ -60,26 +66,28 @@ const Carousel = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal:10,
-    paddingBottom:30,
+    paddingBottom: 30,
     alignItems: "center",
   },
-
+  flatListContent: {
+    alignItems: "center",
+  },
   pagination: {
     flexDirection: "row",
     position: "absolute",
-    bottom: 15,
+    bottom: 20,
   },
   dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: "#ccc",
     marginHorizontal: 6,
+    // transition: 'width 0.3s',
   },
   activeDot: {
     backgroundColor: "#007bff",
-    width:30
+    width: 24,
   },
 });
 
